@@ -48,7 +48,7 @@ export async function importSettings(data: string) {
         await VencordNative.settings.set(parsed.settings);
         await VencordNative.quickCss.set(parsed.quickCss);
     } else
-        throw new Error("Invalid Settings. Is this even a Vencord Settings file?");
+        throw new Error("Invalid Settings. Is this even a Cutcord Settings file?");
 }
 
 export async function exportSettings({ minify }: { minify?: boolean; } = {}) {

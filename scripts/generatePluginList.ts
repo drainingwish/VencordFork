@@ -63,13 +63,15 @@ function getObjectProp(node: ObjectLiteralExpression, name: string) {
 
 function parseDevs() {
     const file = createSourceFile("constants.ts", readFileSync("src/utils/constants.ts", "utf8"), ScriptTarget.Latest);
+    const registries = new Set(["Devs", "EquicordDevs"]);
 
     for (const child of file.getChildAt(0).getChildren()) {
         if (!isVariableStatement(child)) continue;
 
-        const devsDeclaration = child.declarationList.declarations.find(d => hasName(d, "Devs"));
+        const devsDeclaration = child.declarationList.declarations.find(d => registries.has(getName(d) ?? ""));
         if (!devsDeclaration?.initializer || !isCallExpression(devsDeclaration.initializer)) continue;
 
+        const registry = getName(devsDeclaration)!;
         const value = devsDeclaration.initializer.arguments[0];
 
         if (!isSatisfiesExpression(value) || !isObjectLiteralExpression(value.expression)) throw new Error("Failed to parse devs: not an object literal");
@@ -80,16 +82,16 @@ function parseDevs() {
 
             if (!isObjectLiteralExpression(value)) throw new Error(`Failed to parse devs: ${name} is not an object literal`);
 
-            devs[name] = {
+            devs[`${registry}.${name}`] = {
                 name: (getObjectProp(value, "name") as StringLiteral).text,
                 id: (getObjectProp(value, "id") as BigIntLiteral).text.slice(0, -1)
             };
         }
 
-        return;
+        registries.delete(registry);
     }
 
-    throw new Error("Could not find Devs constant");
+    if (registries.size) throw new Error(`Could not find developer constants: ${[...registries].join(", ")}`);
 }
 
 async function parseFile(fileName: string) {
@@ -137,7 +139,7 @@ async function parseFile(fileName: string) {
                     if (!isArrayLiteralExpression(value)) throw fail("authors is not an array literal");
                     data.authors = value.elements.map(e => {
                         if (!isPropertyAccessExpression(e)) throw fail("authors array contains non-property access expressions");
-                        const d = devs[getName(e)!];
+                        const d = devs[e.getText(file)];
                         if (!d) throw fail(`couldn't look up author ${getName(e)}`);
                         return d;
                     });

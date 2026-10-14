@@ -48,7 +48,7 @@ export default tseslint.config(
                     ["@utils", "./src/utils"],
                     ["@api", "./src/api"],
                     ["@components", "./src/components"],
-                    ["@equicordplugins", "./src/userplugins"]
+                    ["@plugins", "./src/plugins"]
                 ]
             }
         },

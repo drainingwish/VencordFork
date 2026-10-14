@@ -1,0 +1,25 @@
+Cutcord
+Maintained by drainingwish
+Source: https://github.com/drainingwish/VencordFork
+
+Cutcord is a modified version of Vencord incorporating plugins and code from
+Equicord. It is an independently maintained fork.
+
+Original Vencord copyright: Vendicated and contributors.
+Equicord code and imported plugins retain their original copyright notices
+and author credits. Those notices, third-party licenses, and the GNU General
+Public License in LICENSE continue to apply.
+
+Modifications dated 2026-10-14:
+- Integrated the additional user plugins into the bundled plugin directory.
+- Updated plugin imports and catalog generation while retaining author credits.
+- Applied Cutcord branding and removed donation prompts.
+- Configured development releases for the Cutcord repository.
+- Adapted imported plugins and shared APIs to this fork's interfaces.
+
+Cutcord is distributed under GPL-3.0-or-later, without warranty, as described
+in LICENSE. Recipients may copy, modify, and redistribute it under that license.
+Corresponding source must accompany distributed binaries or be provided by
+one of the methods permitted by the GPL. The source for a published build is
+the matching commit in the source repository, including its build scripts,
+dependency manifests, patches, and this notice.

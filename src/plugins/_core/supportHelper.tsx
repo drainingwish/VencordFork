@@ -67,7 +67,15 @@ async function forceUpdate() {
     return outdated;
 }
 
-export function detectClient() {
+interface ClientInfo {
+    name: string;
+    version?: string;
+    info?: string;
+    shortHash?: string;
+    dev?: boolean;
+}
+
+export function detectClient(): ClientInfo {
     if (IS_DISCORD_DESKTOP) {
         return {
             name: "Discord Desktop",

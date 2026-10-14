@@ -84,7 +84,7 @@ export function AddonCard({ disabled, isNew, name, infoButton, footer, author, e
                 {infoButton}
 
                 {sourceBadge && (
-                    <Tooltip text={tooltip || "Equicord Plugin"}>
+                    <Tooltip text={tooltip || "Custom Plugin"}>
                         {({ onMouseEnter, onMouseLeave }) => (
                             <span onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                                 {sourceBadge}

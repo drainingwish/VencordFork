@@ -1,5 +1,6 @@
-name: Build DevBuild
+name: Build Cutcord
 on:
+    workflow_dispatch:
     push:
         branches:
             - main
@@ -7,74 +8,73 @@ on:
             - .github/workflows/build.yml
             - src/**
             - browser/**
-            - scripts/build/**
+            - scripts/**
             - package.json
             - pnpm-lock.yaml
+            - pnpm-workspace.yaml
+            - tsconfig.json
+            - packages/**
+            - patches/**
+            - LICENSE
+            - NOTICE
+
+permissions:
+    contents: write
+
+concurrency:
+    group: cutcord-devbuild
+    cancel-in-progress: true
+
 env:
     FORCE_COLOR: true
+    VENCORD_REMOTE: ${{ github.repository }}
 
 jobs:
     Build:
+        if: github.repository == 'drainingwish/VencordFork'
         runs-on: ubuntu-latest
 
         steps:
             - uses: actions/checkout@v7
 
-            - uses: pnpm/action-setup@v6 # Install pnpm using packageManager key in package.json
+            - uses: pnpm/action-setup@v6
 
             - name: Use Node.js 24
               uses: actions/setup-node@v6
               with:
                   node-version: 24
-                  cache: "pnpm"
+                  cache: pnpm
 
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
+            - name: Check types
+              run: pnpm testTsc
+
             - name: Build web
               run: pnpm buildWebStandalone
 
-            - name: Build
-              run: pnpm build --standalone
+            - name: Build desktop
+              run: pnpm buildStandalone
 
             - name: Generate plugin list
               run: pnpm generatePluginJson dist/plugins.json dist/plugin-readmes.json
 
-            - name: Clean up obsolete files
+            - name: Prepare release files
               run: |
-                  rm -rf dist/*-unpacked dist/vendor Vencord.user.css vencordDesktopRenderer.css vencordDesktopRenderer.css.map
+                  rm -rf dist/*-unpacked dist/vendor
+                  cp LICENSE NOTICE dist/
+                  echo "RELEASE_HASH=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
 
-            - name: Get some values needed for the release
-              id: release_values
+            - name: Publish Cutcord DevBuild
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  GH_REPO: ${{ github.repository }}
               run: |
-                  echo "release_tag=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
-            - name: Upload DevBuild as release
-              if: github.repository == 'Vendicated/Vencord'
-              run: |
+                  if gh release view devbuild >/dev/null 2>&1; then
+                      gh api --method PATCH "repos/$GH_REPO/git/refs/tags/devbuild" -f sha="$GITHUB_SHA" -F force=true
+                  else
+                      gh release create devbuild --target "$GITHUB_SHA" --title "Cutcord DevBuild $RELEASE_HASH" --notes "Cutcord development build. Based on Vencord and Equicord; see LICENSE and NOTICE."
+                  fi
                   gh release upload devbuild --clobber dist/*
-                  gh release edit devbuild --title "DevBuild $RELEASE_TAG"
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  RELEASE_TAG: ${{ env.release_tag }}
-
-            - name: Upload DevBuild to builds repo
-              if: github.repository == 'Vendicated/Vencord'
-              run: |
-                  git config --global user.name "$USERNAME"
-                  git config --global user.email actions@github.com
-
-                  git clone https://$USERNAME:$API_TOKEN@github.com/$GH_REPO.git upload
-                  cd upload
-
-                  GLOBIGNORE=.git:.gitignore:README.md:LICENSE
-                  rm -rf *
-                  cp -r ../dist/* .
-
-                  git add -A
-                  git commit -m "Builds for https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
-                  git push --force https://$USERNAME:$API_TOKEN@github.com/$GH_REPO.git
-              env:
-                  API_TOKEN: ${{ secrets.BUILDS_TOKEN }}
-                  GH_REPO: Vencord/builds
-                  USERNAME: GitHub-Actions
+                  gh release edit devbuild --title "Cutcord DevBuild $RELEASE_HASH" --latest

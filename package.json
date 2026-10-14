@@ -1,18 +1,18 @@
 {
-    "name": "vencord",
+    "name": "cutcord",
     "private": "true",
     "version": "1.15.11",
-    "description": "The cutest Discord client mod",
-    "homepage": "https://github.com/Vendicated/Vencord#readme",
+    "description": "Cutcord, a Discord client mod based on Vencord and Equicord",
+    "homepage": "https://github.com/drainingwish/VencordFork",
     "bugs": {
         "url": "https://github.com/Vendicated/Vencord/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Vendicated/Vencord.git"
+        "url": "git+https://github.com/drainingwish/VencordFork.git"
     },
     "license": "GPL-3.0-or-later",
-    "author": "Vendicated",
+    "author": "drainingwish",
     "scripts": {
         "build": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
         "buildStandalone": "pnpm build --standalone",
@@ -93,5 +93,9 @@
     "packageManager": "pnpm@11.9.0",
     "engines": {
         "node": ">=22"
-    }
+    },
+    "contributors": [
+        "Vendicated and Vencord contributors",
+        "Equicord contributors"
+    ]
 }

@@ -289,6 +289,8 @@ export interface MessageAttachment {
     spoiler: boolean;
     url: string;
     content_type?: string;
+    title?: string;
+    description?: string;
     width?: number;
     height?: number;
 }

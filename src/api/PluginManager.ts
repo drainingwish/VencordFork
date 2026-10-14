@@ -31,8 +31,8 @@ import { addNicknameIcon, removeNicknameIcon } from "@api/NicknameIcons";
 import { addProfileCollection, removeProfileCollection } from "@api/ProfileCollections";
 import { addProfileSection, removeProfileSection } from "@api/ProfileSections";
 import { Settings, SettingsStore } from "@api/Settings";
-import { addUserAreaButton, removeUserAreaButton } from "@api/UserArea";
 import { disableStyle, enableStyle } from "@api/Styles";
+import { addUserAreaButton, removeUserAreaButton } from "@api/UserArea";
 import { traceFunction } from "@debug/Tracer";
 import { Logger } from "@utils/Logger";
 import { onlyOnce } from "@utils/onlyOnce";
@@ -373,11 +373,11 @@ export const initPluginManager = onlyOnce(function init() {
     const pluginsValues = Object.values(Plugins);
     const settings = Settings.plugins;
 
-    const pluginKeysToBind: Array<keyof PluginDef & `${"on" | "render"}${string}`> = [
+    const pluginKeysToBind = [
         "onBeforeMessageEdit", "onBeforeMessageSend", "onMessageClick",
         "renderMemberListDecorator", "renderMessageAccessory", "renderMessageDecoration",
         "renderNicknameIcon"
-    ];
+    ] as const satisfies ReadonlyArray<keyof PluginDef>;
 
     const neededApiPlugins = new Set<string>();
 

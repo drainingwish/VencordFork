@@ -175,15 +175,13 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                 <div className={cl("header")}>
                     <BaseText tag="h1" weight="semibold" size="lg">{plugin.name}</BaseText>
                     {pluginMeta.userPlugin && (
-                        <Tooltip text="Equicord Plugin">
+                        <Tooltip text="Custom Plugin">
                             {({ onMouseEnter, onMouseLeave }) => (
-                                <img
-                                    src="https://equicord.org/assets/favicon.png"
-                                    alt="Equicord"
+                                <span
                                     className={cl("source")}
                                     onMouseEnter={onMouseEnter}
                                     onMouseLeave={onMouseLeave}
-                                />
+                                >Custom</span>
                             )}
                         </Tooltip>
                     )}

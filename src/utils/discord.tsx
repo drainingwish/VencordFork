@@ -119,7 +119,7 @@ export async function copyWithToast(text: string, toastMessage = "Copied to clip
     showToast(toastMessage, "success");
 }
 
-interface MessageOptions {
+export interface MessageOptions {
     messageReference: Message["messageReference"];
     allowedMentions: {
         parse: string[];

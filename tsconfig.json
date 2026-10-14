@@ -33,9 +33,7 @@
             "@webpack": ["./src/webpack/webpack"],
             "@webpack/patcher": ["./src/webpack/patchWebpack"],
             "@webpack/wreq.d": ["./src/webpack/wreq.d"],
-            "@webpack/types": ["./src/webpack/types"],
-            "@equicordplugins/_core/*": ["./src/userplugins/*"],
-            "@equicordplugins/*": ["./src/userplugins/*"]
+            "@webpack/types": ["./src/webpack/types"]
         },
 
         "plugins": [

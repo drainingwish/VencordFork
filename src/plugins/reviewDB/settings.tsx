@@ -60,14 +60,6 @@ export const settings = definePluginSettings({
             <div className={cl("button-grid")} >
                 <Button onClick={openBlockModal}>Manage Blocked Users</Button>
 
-                <Button
-                    variant="positive"
-                    onClick={() => {
-                        VencordNative.native.openExternal("https://github.com/sponsors/mantikafasi");
-                    }}
-                >
-                    Support ReviewDB development
-                </Button>
 
                 <Button variant="link" onClick={async () => {
                     let url = "https://reviewdb.mantikafasi.dev";

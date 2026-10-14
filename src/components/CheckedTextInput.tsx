@@ -23,6 +23,7 @@ interface TextInputProps {
      * WARNING: Changing this between renders will have no effect!
      */
     initialValue: string;
+    placeholder?: string;
     /**
      * This will only be called if the new value passed validate()
      */
@@ -39,7 +40,7 @@ interface TextInputProps {
  * A very simple wrapper around Discord's TextInput that validates input and shows
  * the user an error message and only calls your onChange when the input is valid
  */
-export function CheckedTextInput({ initialValue, onChange, validate }: TextInputProps) {
+export function CheckedTextInput({ initialValue, onChange, validate, placeholder }: TextInputProps) {
     const [value, setValue] = useState(initialValue);
     const [error, setError] = useState<string>();
 
@@ -60,6 +61,7 @@ export function CheckedTextInput({ initialValue, onChange, validate }: TextInput
         <>
             <TextInput
                 type="text"
+                placeholder={placeholder}
                 value={value}
                 onChange={handleChange}
                 error={error}

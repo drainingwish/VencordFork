@@ -20,18 +20,14 @@ import "./fixDiscordBadgePadding.css";
 
 import { _getBadges, BadgePosition, BadgeUserArgs, ProfileBadge } from "@api/Badges";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Flex } from "@components/Flex";
-import { Heart } from "@components/Heart";
 import { CopyIcon, LinkIcon } from "@components/Icons";
-import DonateButton from "@components/settings/DonateButton";
 import { openContributorModal } from "@components/settings/tabs";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
-import { Margins } from "@utils/margins";
 import { shouldShowContributorBadge } from "@utils/misc";
 import definePlugin from "@utils/types";
-import { ContextMenuApi, Forms, Menu, Modal, openModal, showToast, UserStore } from "@webpack/common";
+import { ContextMenuApi, Menu, showToast, UserStore } from "@webpack/common";
 
 const CONTRIBUTOR_BADGE = "https://cdn.discordapp.com/emojis/1092089799109775453.png?size=64";
 
@@ -192,63 +188,6 @@ export default definePlugin({
             },
             onContextMenu(event, badge) {
                 ContextMenuApi.openContextMenu(event, () => <BadgeContextMenu badge={badge} />);
-            },
-            onClick() {
-                openModal(props => (
-                    <ErrorBoundary noop onError={() => {
-                        props.onClose();
-                        VencordNative.native.openExternal("https://github.com/sponsors/Vendicated");
-                    }}>
-                        <Modal
-                            {...props}
-                            title={
-                                <Forms.FormTitle
-                                    tag="h2"
-                                    style={{
-                                        width: "100%",
-                                        textAlign: "center",
-                                        margin: 0
-                                    }}
-                                >
-                                    <Flex justifyContent="center" alignItems="center" gap="0.5em">
-                                        <Heart />
-                                        Vencord Donor
-                                    </Flex>
-                                </Forms.FormTitle>
-                            }
-                        >
-                            <div>
-                                <Flex>
-                                    <img
-                                        role="presentation"
-                                        src="https://cdn.discordapp.com/emojis/1026533070955872337.png"
-                                        alt=""
-                                        style={{ margin: "auto" }}
-                                    />
-                                    <img
-                                        role="presentation"
-                                        src="https://cdn.discordapp.com/emojis/1026533090627174460.png"
-                                        alt=""
-                                        style={{ margin: "auto" }}
-                                    />
-                                </Flex>
-                                <div style={{ padding: "1em" }}>
-                                    <Forms.FormText>
-                                        This Badge is a special perk for Vencord Donors
-                                    </Forms.FormText>
-                                    <Forms.FormText className={Margins.top20}>
-                                        Please consider supporting the development of Vencord by becoming a donor. It would mean a lot!!
-                                    </Forms.FormText>
-                                </div>
-                            </div>
-                            <div>
-                                <Flex justifyContent="center" style={{ width: "100%" }}>
-                                    <DonateButton />
-                                </Flex>
-                            </div>
-                        </Modal>
-                    </ErrorBoundary>
-                ));
             },
         } satisfies ProfileBadge));
     }
