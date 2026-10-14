@@ -12,6 +12,7 @@ import { AddonCard } from "@components/settings/AddonCard";
 import { Plugin } from "@utils/types";
 import { ToastPosition } from "@vencord/discord-types/enums";
 import { React, showToast } from "@webpack/common";
+
 import { PluginMeta } from "~plugins";
 
 import { cl, logger } from ".";
@@ -77,13 +78,9 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
         settings.enabled = !wasEnabled;
     }
 
-    const isEquicordPlugin = PluginMeta[plugin.name]?.userPlugin;
-    const sourceBadge = isEquicordPlugin ? (
-        <img
-            src="https://equicord.org/assets/favicon.png"
-            alt="Equicord"
-            className={cl("source")}
-        />
+    const isCustomPlugin = PluginMeta[plugin.name]?.userPlugin;
+    const sourceBadge = isCustomPlugin ? (
+        <span className={cl("source")}>Custom</span>
     ) : null;
 
     return (
@@ -97,7 +94,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             sourceBadge={sourceBadge}
-            tooltip={isEquicordPlugin ? "Equicord Plugin" : undefined}
+            tooltip={isCustomPlugin ? "Custom Plugin" : undefined}
             infoButton={
                 <button
                     role="switch"
