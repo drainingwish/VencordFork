@@ -20,13 +20,19 @@ export function sendSync<T = any>(event: IpcEvents, ...args: any[]) {
     return ipcRenderer.sendSync(event, ...args) as T;
 }
 
-const PluginHelpers = {} as Record<string, Record<string, (...args: any[]) => Promise<any>>>;
+const PluginHelpers = {} as Record<string, Record<string, (...args: any[]) => any>>;
 const pluginIpcMap = sendSync<PluginIpcMappings>(IpcEvents.GET_PLUGIN_IPC_METHOD_MAP);
 
 for (const [plugin, methods] of Object.entries(pluginIpcMap)) {
     const map = PluginHelpers[plugin] = {};
     for (const [methodName, method] of Object.entries(methods)) {
-        map[methodName] = (...args: any[]) => invoke(method as IpcEvents, ...args);
+        map[methodName] = methodName.startsWith("sync")
+            ? (...args: any[]) => {
+                const result = sendSync<IpcRes>(method as IpcEvents, ...args);
+                if (!result.ok) throw new Error(result.error);
+                return result.value;
+            }
+            : (...args: any[]) => invoke(method as IpcEvents, ...args);
     }
 }
 

@@ -55,6 +55,17 @@ export interface Dev {
  * If you are fine with attribution but don't want the badge, add badge: false
  */
 export const Devs = /* #__PURE__*/ Object.freeze({
+    DevilBro: {
+        name: "DevilBro",
+        id: 278543574059057154n,
+        badge: false
+    },
+    arg0NNY: {
+        name: "arg0NNY",
+        // Upstream does not supply a Discord account ID.
+        id: 0n,
+        badge: false
+    },
     rot: {
         name: "rot",
         id: 1021210809164111932n

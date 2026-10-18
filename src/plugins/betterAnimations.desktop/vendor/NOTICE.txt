@@ -1,0 +1,18 @@
+BetterAnimations 2.1.15 by arg0NNY / okdevme
+Source: https://github.com/okdevme/BetterAnimations
+Original plugin supplied by the user: BetterAnimations.plugin.js
+License: MIT (see LICENSE). Bundled dependency notices remain in engine.js.
+
+Cutcord/Vencord adaptation:
+- Scoped compatibility API; no global BetterDiscord runtime or library installer.
+- Vencord settings, native form components and notifications.
+- Complete animation engine, pack framework, catalog and a native JSON pack editor.
+- Dedicated pack storage through bounded native file operations.
+- Discord component declaration capture and current React component compatibility.
+- Current channel-row refs and sidebar enum; native settings shell and scroller.
+- Startup after the main Discord UI mounts, and cleanup on disable.
+- Donation buttons removed; original author and source links retained.
+
+Discord's removed legacy toast and composer-anchor APIs are optional in this
+port. Notifications use the native adapter; modern popovers retain their own
+positioning. The upstream animation error inspector remains available.

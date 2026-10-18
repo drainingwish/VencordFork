@@ -33,6 +33,18 @@ for (const [plugin, methods] of Object.entries(PluginNatives)) {
     for (const [methodName, method] of entries) {
         const key = `VencordPluginNative_${plugin}_${methodName}`;
         ipcMain.handle(key, method);
+        // Synchronous native methods are explicit and must never return a Promise.
+        if (methodName.startsWith("sync")) {
+            ipcMain.on(key, (event, ...args) => {
+                try {
+                    const value = method(event, ...args);
+                    if (value instanceof Promise) throw new Error("Synchronous native method returned a Promise");
+                    event.returnValue = { ok: true, value };
+                } catch (error) {
+                    event.returnValue = { ok: false, error: String(error) };
+                }
+            });
+        }
         mappings[methodName] = key;
     }
 }
